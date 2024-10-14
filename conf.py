@@ -1,0 +1,2 @@
+COLOR_BG = (50, 50, 50)
+SIZE_SCREEN = (1100, 650)
