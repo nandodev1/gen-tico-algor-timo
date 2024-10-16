@@ -12,7 +12,7 @@ class Loop:
         self.draw_rede = draw_rede.DrawRede(825, 20)
         self.best_agente = None
         self.quant_agentes = 500
-        self.qt_loop_epoca = 1_000
+        self.qt_loop_epoca = 1_500
         self.qt_iter = 0
         self.surface = surface
         self.parede = Parede(surface, 'tst.svg',  (255, 255, 255))

@@ -50,7 +50,7 @@ class Agente(Obj):
     def __init__(self, surface, paredes):
         super().__init__(surface)
         self.is_collide = False
-        self.speed =  6#Velocidade em pixels por update
+        self.speed =  1#Velocidade em pixels por update
         self.angle = (math.pi*2/360)*(randint(1, 360))
         self.score = 0
         self.rede = IA.Rede()

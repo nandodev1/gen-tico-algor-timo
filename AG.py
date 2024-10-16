@@ -32,7 +32,7 @@ class AG:
         for k in range(0, 3):
             ag = Agente(surface, parede)
             pesos = arq.readline().split(' ')
-            self.mutation(pesos)
+            self.mutation(pesos, 0.1)
             i = 1
             for layer in ag.rede.rede:
                 for perc in layer.perceptrons:
@@ -44,13 +44,20 @@ class AG:
             ags.append(ag)
         arq.close()
 
-    def mutation(self, pesos:str):
+    def mutation(self, pesos:str, hate_taxe: float):
         pesos_txt = []
-        for p in pesos:
+        pesos_txt.append(pesos[0])
+        for i in range(1, len(pesos)-1):
             if randint(0, 100) < 30:
-                if p == '\n':
+                if pesos[i] == '\n':
                     break
-                p_n = int(p)
-                p_n += int(p_n * 0.3)
+                p_n = int(pesos[i])
+                if randint(0, 2) == 1:
+                    p_n += int(p_n * hate_taxe)
+                else:
+                    p_n -= int(p_n * hate_taxe)
                 pesos_txt.append(str(p_n))
-        pass
+            else:
+                pesos_txt.append(pesos[i])
+        pesos_txt.append(pesos[-1])
+        return pesos_txt
