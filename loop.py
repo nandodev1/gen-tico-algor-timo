@@ -11,12 +11,13 @@ class Loop:
         self.alg_gen = AG.AG()
         self.draw_rede = draw_rede.DrawRede(825, 20)
         self.best_agente = None
-        self.quant_agentes = 500
-        self.qt_loop_epoca = 1_500
+        self.quant_agentes = 300
+        self.qt_loop_epoca = 6_000
         self.qt_iter = 0
         self.surface = surface
         self.parede = Parede(surface, 'tst.svg',  (255, 255, 255))
         self.checkpoints = Parede(surface, 'checkpoints.svg', (0, 155, 0))
+        self.desist = Parede(surface, 'dest.svg', (0, 0, 155))
         self.sensor = Sensor(surface)
         self.agentes = []
         #ag = self.load_net()
@@ -38,6 +39,7 @@ class Loop:
             agent.y = pos_m[1]
         self.parede.loop()
         self.checkpoints.loop()
+        self.desist.loop()
         self.sensor.loop()
         for ag in self.agentes:
             ag.loop()
@@ -50,14 +52,22 @@ class Loop:
                     #self.agentes.remove(ag)
                 else:
                     ag.is_collide = False
+        agentes_remover = []
+        for rect in self.desist.rects:
+            for ag in self.agentes:
+                collision = rect.colliderect((ag.pos_rect[0] -5, ag.pos_rect[1] - 5, ag.pos_rect[2], ag.pos_rect[3]))
+                if collision:
+                    agentes_remover.append(ag)
+        
+        for ag in agentes_remover:
+            self.agentes.remove(ag)
+        for ag in self.agentes:
+            if ag.score == 0:
+                    agentes_remover.append(ag)
         self.qt_iter += 1
         if self.qt_iter >= self.qt_loop_epoca:
             self.qt_iter = 0
             sys.stdout.write("\n=======================Fim de epoca========================\n")
-            agentes_remover = []
-            for ag in self.agentes:
-                if ag.score == 0:
-                    agentes_remover.append(ag)
             ags = self.select_ag_cross()
             self.save_net(ags)
             for ag in agentes_remover:
@@ -65,8 +75,23 @@ class Loop:
             #Zera score para iniciar nova epoca
             for ag in self.agentes:
                 ag.score = 0
+            self.agentes.clear()
             self.alg_gen.crosover()
-            self.alg_gen.load_nets(self.surface, self.parede)
+            #adiciona agentes melhores e o crusamento
+            for a in ags:
+                self.agentes.append(a)
+            #self.agentes.append(ags[0])
+            for i in range( 0, 197):
+                peso_mut = self.alg_gen.get_pesos_str()
+                sort = randint(0, 100)
+                if sort < 60:
+                    ag_mut = self.alg_gen.mutation(peso_mut[0], 0.1)
+                if sort > 60 and sort < 90:
+                    ag_mut = self.alg_gen.mutation(peso_mut[1], 0.1)
+                if sort > 90:
+                    ag_mut = self.alg_gen.mutation(peso_mut[2], 0.1)
+                ag = self.alg_gen.load_pesos(self.surface, self.parede, ag_mut)
+                self.agentes.append(ag)
         self.draw_rede.draw(self.surface, self.agentes[0])
 
     def save_net(self, ag):

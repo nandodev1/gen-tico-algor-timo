@@ -32,7 +32,6 @@ class AG:
         for k in range(0, 3):
             ag = Agente(surface, parede)
             pesos = arq.readline().split(' ')
-            self.mutation(pesos, 0.1)
             i = 1
             for layer in ag.rede.rede:
                 for perc in layer.perceptrons:
@@ -43,12 +42,35 @@ class AG:
                         i += 1
             ags.append(ag)
         arq.close()
+        return ags
+    
+    def get_pesos_str(self):
+        pesos = []
+        pesos_txt = open('pesos.txt', 'r')
+        for i in range(0, 3):
+            p = pesos_txt.readline().split(' ')
+            pesos.append(p)
+        return pesos
+
+    def load_pesos(self, surface, parede, pesos_str):
+        ags = []
+        ag = Agente(surface, parede)
+        i = 1
+        for layer in ag.rede.rede:
+            for perc in layer.perceptrons:
+                perc.bias = int(pesos_str[i])
+                i += 1
+                for j in range(0, len(perc.pesos)):
+                    perc.pesos[j] = int(pesos_str[i])
+                    i += 1
+            ags.append(ag)
+        return ag
 
     def mutation(self, pesos:str, hate_taxe: float):
         pesos_txt = []
         pesos_txt.append(pesos[0])
         for i in range(1, len(pesos)-1):
-            if randint(0, 100) < 30:
+            if randint(0, 100) < 10:
                 if pesos[i] == '\n':
                     break
                 p_n = int(pesos[i])
