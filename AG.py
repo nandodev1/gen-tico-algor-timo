@@ -70,7 +70,7 @@ class AG:
         pesos_txt = []
         pesos_txt.append(pesos[0])
         for i in range(1, len(pesos)-1):
-            if randint(0, 100) < 10:
+            if randint(0, 100) < 90:
                 if pesos[i] == '\n':
                     break
                 p_n = int(pesos[i])
