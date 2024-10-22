@@ -8,7 +8,7 @@
    version="1.1"
    id="svg1"
    sodipodi:docname="tst.svg"
-   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -22,13 +22,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.14797438"
-     inkscape:cx="1115.0579"
-     inkscape:cy="1273.8692"
-     inkscape:window-width="1365"
-     inkscape:window-height="699"
-     inkscape:window-x="2732"
-     inkscape:window-y="0"
+     inkscape:zoom="0.20619323"
+     inkscape:cx="1716.8362"
+     inkscape:cy="1049.986"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg1"
      showgrid="false" />
@@ -118,4 +118,25 @@
      height="82.581093"
      x="512.90564"
      y="549.06409" />
+  <rect
+     style="fill:#000000;stroke-width:0.279366"
+     id="rect13"
+     width="89.462975"
+     height="15.424651"
+     x="672.51477"
+     y="320.83273" />
+  <rect
+     style="fill:#000000;stroke-width:0.437914"
+     id="rect14"
+     width="18.968277"
+     height="116.51942"
+     x="270.9754"
+     y="82.647491" />
+  <rect
+     style="fill:#000000;stroke-width:0.389398"
+     id="rect14-2"
+     width="18.968277"
+     height="92.13163"
+     x="387.42599"
+     y="227.68365" />
 </svg>

@@ -55,8 +55,8 @@ class Agente(Obj):
         self.score = 0
         self.rede = IA.Rede()
         self.obst = paredes
-        self.x = 50#randint(100, 550)
-        self.y = 100#randint(100, 550)
+        self.x = 500#randint(100, 550)
+        self.y = 200#randint(100, 550)
         self.pos_rect = (self.x, self.y, 10, 10)
         self.color = (randint(0, 255), randint(0, 255), randint(0, 255))
         self.sensor_d = Sensor(surface)
@@ -85,15 +85,20 @@ class Agente(Obj):
         else:
            inp_sensor.append(0)
         inp_rede = inp_sensor
+        inp_rede.append(self.speed)
         out = self.rede.out(inp_rede)
         if out[0] > 0:
             self.angle += math.pi/30
         if out[1] > 0:
             self.angle -= math.pi/30
         if out[2] > 0:
-            self.speed = 2
+            if self.speed < 3:
+                self.speed += 1
         if out[3] > 0:
-            self.speed = -2
+            if self.speed > -1:
+                self.speed -= 1
+        if out[4] > 0:
+            self.speed = 0
         self.x += math.cos(self.angle - math.pi/4) * self.speed
         self.y += math.sin(self.angle - math.pi/4) * self.speed
         

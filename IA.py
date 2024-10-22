@@ -37,9 +37,9 @@ class Rede:
 
         self.rede = []
 
-        self.add_layer(4, 2)
-        self.add_layer(5, 4)
-        self.add_layer(4, 5)
+        self.add_layer(6, 3)
+        self.add_layer(5, 6)
+        self.add_layer(5, 5)
 
         self.last_process = []
 
