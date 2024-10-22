@@ -8,11 +8,12 @@ import AG
 
 class Loop:
     def __init__(self, surface):
+        self.qt_epoca = 0
         self.alg_gen = AG.AG()
-        self.draw_rede = draw_rede.DrawRede(825, 20)
+        self.draw_rede = draw_rede.DrawRede(850, 20)
         self.best_agente = None
-        self.quant_agentes = 300
-        self.qt_loop_epoca = 6_000
+        self.quant_agentes = 500
+        self.qt_loop_epoca = 1_500
         self.qt_iter = 0
         self.surface = surface
         self.parede = Parede(surface, 'tst.svg',  (255, 255, 255))
@@ -20,13 +21,16 @@ class Loop:
         self.desist = Parede(surface, 'dest.svg', (0, 0, 155))
         self.sensor = Sensor(surface)
         self.agentes = []
+        self.agentes_removidos = []
         #ag = self.load_net()
         #self.agentes.append(ag)
+        ags = self.alg_gen.get_pesos_str()
         for i in range(0, self.quant_agentes):
             self.agentes.append(Agente(surface, self.parede))
     def loop(self):
-        my_font = pygame.font.SysFont('Comic Sans MS', 40)
-        self.surface.blit(my_font.render('Epóca: ' + str(self.qt_iter) + '/' + str(self.qt_loop_epoca), False, (255, 255, 255)), (50,10))
+        my_font = pygame.font.SysFont('monospace', 20)
+        self.surface.blit(my_font.render('(' + str(self.qt_iter) + '/' + str(self.qt_loop_epoca) + ')', False, (255, 255, 255)), (930,430))
+        self.surface.blit(my_font.render('Epóca: ' + str(self.qt_epoca) , False, (255, 255, 255)), (850,400))
         if pygame.mouse.get_pressed() == (True, False, False):
             agent = Agente(self.surface, self.parede)
             pos_m = pygame.mouse.get_pos()
@@ -49,23 +53,11 @@ class Loop:
                 if collision and not ag.is_collide:
                     ag.score += 1
                     ag.is_collide = True
-                    #self.agentes.remove(ag)
-                else:
+                if not collision and not ag.is_collide:
                     ag.is_collide = False
-        agentes_remover = []
-        for rect in self.desist.rects:
-            for ag in self.agentes:
-                collision = rect.colliderect((ag.pos_rect[0] -5, ag.pos_rect[1] - 5, ag.pos_rect[2], ag.pos_rect[3]))
-                if collision:
-                    agentes_remover.append(ag)
-        
-        for ag in agentes_remover:
-            self.agentes.remove(ag)
-        for ag in self.agentes:
-            if ag.score == 0:
-                    agentes_remover.append(ag)
         self.qt_iter += 1
         if self.qt_iter >= self.qt_loop_epoca:
+            self.qt_epoca += 1
             self.qt_iter = 0
             sys.stdout.write("\n=======================Fim de epoca========================\n")
             ags = self.select_ag_cross()
@@ -77,21 +69,7 @@ class Loop:
                 ag.score = 0
             self.agentes.clear()
             self.alg_gen.crosover()
-            #adiciona agentes melhores e o crusamento
-            for a in ags:
-                self.agentes.append(a)
-            #self.agentes.append(ags[0])
-            for i in range( 0, 197):
-                peso_mut = self.alg_gen.get_pesos_str()
-                sort = randint(0, 100)
-                if sort < 60:
-                    ag_mut = self.alg_gen.mutation(peso_mut[0], 0.1)
-                if sort > 60 and sort < 90:
-                    ag_mut = self.alg_gen.mutation(peso_mut[1], 0.1)
-                if sort > 90:
-                    ag_mut = self.alg_gen.mutation(peso_mut[2], 0.1)
-                ag = self.alg_gen.load_pesos(self.surface, self.parede, ag_mut)
-                self.agentes.append(ag)
+            self.alg_gen.load_nets(self.surface, self.parede)
         self.draw_rede.draw(self.surface, self.agentes[0])
 
     def save_net(self, ag):
@@ -121,21 +99,15 @@ class Loop:
                     arq.write(str(peso)+' ')
         arq.write('\n')
         arq.close()
-
-    def ordenarLista(self, list_agente: list):
-        val = []
-        for ag in list_agente:
-            val.append(ag.score)
-        val.sort()
-        val_min = val[-1]
-        return val_min
     
     def select_ag_cross(self)-> tuple:
         ag_a = Agente(self.surface, self.parede)
         ag_b = Agente(self.surface, self.parede)
-        for ag in self.agentes:
+        agts = self.agentes_removidos + self.agentes
+        for ag in agts:
             if ag.score > ag_a.score:
                 ag_a = ag
             elif ag.score > ag_b.score:
                 ag_b = ag
+        self.agentes_removidos.clear()
         return (ag_a, ag_b)
