@@ -82,8 +82,8 @@ class Agente(Obj):
         self.score = 0
         self.rede = IA.Rede()
         self.obst = paredes
-        self.x = 90#randint(100, 550)
-        self.y = 100#randint(100, 550)
+        self.x = 500#randint(100, 550)
+        self.y = 300#randint(100, 550)
         self.pos_rect = (self.x, self.y, 10, 10)
         self.color = (randint(0, 255), randint(0, 255), randint(0, 255))
         self.sensor_d = Sensor(surface)

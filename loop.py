@@ -12,7 +12,7 @@ class Loop:
         self.alg_gen = AG.AG()
         self.draw_rede = draw_rede.DrawRede(850, 20)
         self.best_agente = None
-        self.quant_agentes = 500
+        self.quant_agentes = 1000
         self.qt_loop_epoca = 6_000
         self.qt_iter = 0
         self.surface = surface
@@ -33,7 +33,7 @@ class Loop:
         self.ag_teste = Agente(surface, self.parede)
        #s self.agentes.append(self.ag_teste)
     def loop(self):
-        
+        print(self.qt_iter,len(self.agentes))
         my_font = pygame.font.SysFont('monospace', 20)
         self.surface.blit(my_font.render('(' + str(self.qt_iter) + '/' + str(self.qt_loop_epoca) + ')', False, (255, 255, 255)), (930,430))
         self.surface.blit(my_font.render('Epóca: ' + str(self.qt_epoca) , False, (255, 255, 255)), (850,400))
