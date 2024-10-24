@@ -100,6 +100,8 @@ class Loop:
             #self.agentes.append(ags[0])
             for i in range( 0, self.quant_agentes):
                 peso_mut = self.alg_gen.get_pesos_str()
+                if peso_mut[0] == '0':
+                    return (Agente(self.surface, self.parede), Agente(self.surface, self.parede), Agente(self.surface, self.parede))
                 sort = randint(0, 100)
                 if sort < 60:
                     ag_mut = self.alg_gen.mutation(peso_mut[2], 0.3)
