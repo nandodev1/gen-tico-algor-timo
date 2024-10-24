@@ -51,23 +51,25 @@ class Sensor_dist(Sensor):
         self.color = (0, 0, 255)
         self.dep = dependente
         self.parede = paredes
+        self.dist = 0
     def draw(self):
         draw.line(self.surface, self.color, (self.dep.x, self.dep.y), (self.x, self.y))
     def loop(self):
         while True:
             collision = self.parede.collide((self.x, self.y))
             if collision:
+                self.dist = self.get_dist()
                 self.x = self.dep.x
                 self.y = self.dep.y
                 break
             self.x += math.cos(self.angle - math.pi/4) * self.speed
             self.y += math.sin(self.angle - math.pi/4) * self.speed
             self.draw()
+        
     def get_dist(self):
         b = self.dep.x - self.x
         c = self.dep.y - self.y
-        a = math.sqrt(b*b + c*c)
-        return a
+        return math.sqrt(b*b + c*c)
 
 import IA
 from random import randint
@@ -116,9 +118,10 @@ class Agente(Obj):
            inp_sensor.append(1)
         else:
            inp_sensor.append(0)
-        inp_sensor.append(self.sensor_dist.get_dist())
-        inp_rede = inp_sensor
-        inp_rede.append(self.speed)
+        #print(self.sensor_dist.dist)
+        #inp_sensor.append(self.sensor_dist.get_dist())
+        inp_rede = [self.sensor_dist.dist]#inp_sensor
+#        inp_rede.append(self.speed)
         out = self.rede.out(inp_rede)
         if out[0] > 0:
             self.angle += math.pi/30
@@ -130,7 +133,5 @@ class Agente(Obj):
         if out[3] > 0:
             if self.speed > -1:
                 self.speed -= 1
-        if out[4] > 0:
-            self.speed = 0
         self.x += math.cos(self.angle - math.pi/4) * self.speed
         self.y += math.sin(self.angle - math.pi/4) * self.speed
